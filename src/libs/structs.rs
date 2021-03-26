@@ -3,6 +3,8 @@ use serde_derive::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize)]
 pub struct Config {
     pub webhook_url: String,
+    pub username: String,
+    pub avatar_url: String,
 }
 
 #[derive(Serialize)]

@@ -2,7 +2,7 @@ pub mod structs;
 
 // TODO: Macros are better, but I'm too dumb to figure it out
 
-use crate::libs::structs::{Message, Embed, Author, Image, Thumbnail, Footer, Field};
+use crate::libs::structs::{Author, Embed, Field, Footer, Image, Message, Thumbnail};
 
 pub fn gen_message(username: &str, avatar_url: &str, content: &str, embeds: Vec<Embed>) -> Message {
     Message {
@@ -13,28 +13,31 @@ pub fn gen_message(username: &str, avatar_url: &str, content: &str, embeds: Vec<
     }
 }
 
-pub fn gen_embed() -> Embed {
+pub fn gen_embed(
+    author: Author,
+    title: &str,
+    url: &str,
+    description: &str,
+    color: u64,
+    fields: Vec<Field>,
+    thumbnail_url: &str,
+    image_url: &str,
+    footer: Footer,
+) -> Embed {
     Embed {
-        author: Author {
-            name: "Author Name".to_string(),
-            url: "https://github.com/sourTaste000".to_string(),
-            icon_url: "https://cdn.discordapp.com/avatars/556312626058231828/afa950d0270ef001685d1f4c75df8d16.png".to_string()
-        },
-        title: "Embed Title".to_string(),
-        url: "https://github.com/sourTaste000".to_string(),
-        description: "Embed Description".to_string(),
-        color: 10195199,
-        fields: vec![gen_field("Inline Field", "Field value", true), gen_field("Not Inline Field", "Field Value", false)],
+        author,
+        title: title.to_string(),
+        url: url.to_string(),
+        description: description.to_string(),
+        color,
+        fields,
         thumbnail: Thumbnail {
-            url: "https://cdn.discordapp.com/avatars/556312626058231828/afa950d0270ef001685d1f4c75df8d16.png".to_string()
+            url: thumbnail_url.to_string(),
         },
         image: Image {
-            url: "https://cdn.discordapp.com/avatars/556312626058231828/afa950d0270ef001685d1f4c75df8d16.png".to_string()
+            url: image_url.to_string(),
         },
-        footer: Footer {
-            text: "footer text".to_string(),
-            icon_url: "https://cdn.discordapp.com/avatars/556312626058231828/afa950d0270ef001685d1f4c75df8d16.png".to_string()
-        }
+        footer,
     }
 }
 
@@ -42,10 +45,21 @@ pub fn gen_field(name: &str, value: &str, inline: bool) -> Field {
     Field {
         name: name.to_string(),
         value: value.to_string(),
-        inline
+        inline,
     }
 }
 
-// fn gen_author() -> Author {
-//     Author {}
-// }
+pub fn gen_author(name: &str, url: &str, icon_url: &str) -> Author {
+    Author {
+        name: name.to_string(),
+        url: url.to_string(),
+        icon_url: icon_url.to_string(),
+    }
+}
+
+pub fn gen_footer(text: &str, icon_url: &str) -> Footer {
+    Footer {
+        text: text.to_string(),
+        icon_url: icon_url.to_string(),
+    }
+}
