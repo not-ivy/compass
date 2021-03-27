@@ -2,7 +2,8 @@ pub mod structs;
 
 // TODO: Macros are better, but I'm too dumb to figure it out
 
-use crate::libs::structs::{Author, Embed, Field, Footer, Image, Message, Thumbnail};
+use crate::libs::structs::{Author, Config, Embed, Field, Footer, Image, Message, Thumbnail};
+use std::fs;
 
 pub fn gen_message(username: &str, avatar_url: &str, content: &str, embeds: Vec<Embed>) -> Message {
     Message {
@@ -62,4 +63,32 @@ pub fn gen_footer(text: &str, icon_url: &str) -> Footer {
         text: text.to_string(),
         icon_url: icon_url.to_string(),
     }
+}
+
+pub fn gen_config() {
+    let mut webhook_url = String::new();
+    let mut username = String::new();
+    let mut avatar_url = String::new();
+
+    println!("Please enter your discord webhook url here:");
+    let _read = std::io::stdin().read_line(&mut webhook_url).unwrap();
+
+    println!("Please enter your desired username for the webhook");
+    let _read = std::io::stdin().read_line(&mut username).unwrap();
+
+    println!("Please enter the desired avatar url for the webhook");
+    let _read = std::io::stdin().read_line(&mut avatar_url).unwrap();
+
+    let config = Config {
+        webhook_url: webhook_url.trim().to_string(),
+        username: username.trim().to_string(),
+        avatar_url: avatar_url.trim().to_string(),
+    };
+    let _write = fs::write(
+        "config.json",
+        serde_json::to_string(&config)
+            .expect("Failed to serialize to json!")
+            .trim(),
+    )
+    .expect("Failed to write to file!");
 }
