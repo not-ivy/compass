@@ -1,67 +1,61 @@
 pub mod structs;
 
-// TODO: Macros are better, but I'm too dumb to figure it out
-
 use crate::libs::structs::{Author, Config, Embed, Field, Footer, Image, Message, Thumbnail};
 use std::fs;
 
-pub fn gen_message(username: &str, avatar_url: &str, content: &str, embeds: Vec<Embed>) -> Message {
-    Message {
-        username: username.to_string(),
-        avatar_url: avatar_url.to_string(),
-        content: content.to_string(),
-        embeds,
+impl Message {
+    pub fn new(username: &str, avatar_url: &str, content: &str, embeds: Option<Vec<Embed>>) -> Message{
+        Message {
+            username: username.to_string(),
+            avatar_url: avatar_url.to_string(),
+            content: content.to_string(),
+            embeds: match embeds {Some(embeds) => embeds, None => vec![]}
+        }
     }
 }
 
-pub fn gen_embed(
-    author: Author,
-    title: &str,
-    url: &str,
-    description: &str,
-    color: u64,
-    fields: Vec<Field>,
-    thumbnail_url: &str,
-    image_url: &str,
-    footer: Footer,
-) -> Embed {
-    Embed {
-        author,
-        title: title.to_string(),
-        url: url.to_string(),
-        description: description.to_string(),
-        color,
-        fields,
-        thumbnail: Thumbnail {
-            url: thumbnail_url.to_string(),
-        },
-        image: Image {
-            url: image_url.to_string(),
-        },
-        footer,
+impl Embed {
+    pub fn new(author: Option<Author>, title: &str, url: Option<&str>, description: Option<&str>, color: Option<u64>, fields: Option<Vec<Field>>, thumbnail_url: Option<&str>, image_url: Option<&str>, footer: Option<Footer>) -> Embed {
+        Embed {
+            author: match author {Some(author) => author, None => Author::new("", None, None)},
+            title: title.to_string(),
+            url: match url {Some(url) => url.to_string(), None => String::from("")},
+            description: match description {Some(description) => description.to_string(), None => String::from("")},
+            color: match color {Some(color) => color, None => 0 as u64},
+            fields: match fields {Some(field) => field, None => vec![]},
+            thumbnail: Thumbnail { url: match thumbnail_url {Some(thumbnail_url) => thumbnail_url.to_string(), None => String::from("")} },
+            image: Image { url: match image_url {Some(image_url) => image_url.to_string(), None => String::from("")}},
+            footer: match footer {Some(footer) => footer, None => Footer{text: String::from(""), icon_url: String::from("")}}
+        }
     }
 }
 
-pub fn gen_field(name: &str, value: &str, inline: bool) -> Field {
-    Field {
-        name: name.to_string(),
-        value: value.to_string(),
-        inline,
+impl Field {
+    pub fn new(name: &str, value: &str, inline: bool) -> Field {
+        Field {
+            name: name.to_string(),
+            value: value.to_string(),
+            inline
+        }
     }
 }
 
-pub fn gen_author(name: &str, url: &str, icon_url: &str) -> Author {
-    Author {
-        name: name.to_string(),
-        url: url.to_string(),
-        icon_url: icon_url.to_string(),
+impl Author {
+    pub fn new(name: &str, url: Option<&str>, icon_url: Option<&str>) -> Author {
+        Author {
+            name: name.to_string(),
+            url: match url { Some(url) => url.to_string(), None => String::from("") },
+            icon_url: match icon_url { Some(icon_url) => icon_url.to_string(), None => String::from("")}
+        }
     }
 }
 
-pub fn gen_footer(text: &str, icon_url: &str) -> Footer {
-    Footer {
-        text: text.to_string(),
-        icon_url: icon_url.to_string(),
+impl Footer {
+    pub fn new(text: &str, icon_url: Option<&str>) -> Footer{
+        Footer {
+            text: text.to_string(),
+            icon_url: match icon_url {Some(icon_url) => icon_url.to_string(), None => String::from("")}
+        }
     }
 }
 

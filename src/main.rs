@@ -1,6 +1,6 @@
 mod libs;
 
-use crate::libs::structs::{Config, Embed, Message};
+use crate::libs::structs::{Config, Embed, Message, Author, Field, Footer};
 use crate::libs::*;
 use std::fs;
 use std::path::Path;
@@ -31,39 +31,33 @@ fn main() {
 
 fn guide(config: &Config) -> Message {
     let mut content = String::new();
-    let selection = String::new();
+    let mut selection = String::new();
     let embed: Embed;
 
     println!("Please enter the message content;");
     let _read = std::io::stdin().read_line(&mut content).unwrap();
 
     println!("Embeds? (Y/n)");
-    let _read = std::io::stdin().read_line(&mut content).unwrap();
-    if selection.trim().to_lowercase() == "y" || selection.trim().is_empty() {
-        embed = gen_embed(
-            gen_author("", "", ""),
+    let _read = std::io::stdin().read_line(&mut selection).unwrap();
+    return if selection.trim().to_lowercase() == "y" || selection.trim().is_empty() {
+        embed = Embed::new(
+            None,
             "test",
-            "https://example.com",
-            "hello",
-            10195199,
-            vec![gen_field("Field 1", "Value 1", false)],
-            "",
-            "",
-            gen_footer("Footer", ""),
-        )
-    } else {
-        return gen_message(
+            None,
+            Option::from("None"),
+            None,
+            Option::from(vec![Field::new("Field Name 1", "Field Value 1", false)]),
+            None,
+            None,
+            None
+        );
+        Message::new(
             config.username.as_str(),
             config.avatar_url.as_str(),
             content.as_str(),
-            vec![],
-        );
+            Option::from(vec![embed])
+        )
+    } else {
+        Message::new(config.username.as_str(), config.avatar_url.as_str(), content.as_str(), None)
     }
-
-    return gen_message(
-        config.username.as_str(),
-        config.avatar_url.as_str(),
-        content.as_str(),
-        vec![embed],
-    );
 }
