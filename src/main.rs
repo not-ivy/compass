@@ -1,6 +1,6 @@
 mod libs;
 
-use crate::libs::structs::{Config, Embed, Message, Author, Field, Footer};
+use crate::libs::structs::{Author, Config, Embed, Field, Footer, Message};
 use crate::libs::*;
 use std::fs;
 use std::path::Path;
@@ -49,15 +49,20 @@ fn guide(config: &Config) -> Message {
             Option::from(vec![Field::new("Field Name 1", "Field Value 1", false)]),
             None,
             None,
-            None
+            None,
         );
         Message::new(
             config.username.as_str(),
             config.avatar_url.as_str(),
             content.as_str(),
-            Option::from(vec![embed])
+            Option::from(vec![embed]),
         )
     } else {
-        Message::new(config.username.as_str(), config.avatar_url.as_str(), content.as_str(), None)
-    }
+        Message::new(
+            config.username.as_str(),
+            config.avatar_url.as_str(),
+            content.as_str(),
+            None,
+        )
+    };
 }
