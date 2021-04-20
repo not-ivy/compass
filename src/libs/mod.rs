@@ -1,7 +1,61 @@
 pub mod structs;
 
-use crate::libs::structs::{Author, Config, Embed, Field, Footer, Image, Message, Thumbnail};
+use crate::libs::structs::{
+    Author, Client, Config, Embed, Field, Footer, Image, Message, Thumbnail,
+};
+use reqwest::StatusCode;
 use std::fs;
+
+pub(crate) trait Send {
+    fn send(&self, message: Message) -> StatusCode;
+}
+
+impl Client {
+    pub fn new(config: Config) -> Client {
+        Client { config }
+    }
+}
+
+impl Send for Client {
+    fn send(&self, message: Message) -> StatusCode {
+        let response = reqwest::blocking::Client::new()
+            .post(&self.config.webhook_url)
+            .json(&message)
+            .send()
+            .expect("Error while sending request to webhook!");
+        response.status()
+    }
+}
+
+impl Config {
+    pub fn new(webhook_url: String, username: String, avatar_url: String) -> Config {
+        let config = Config {
+            webhook_url: webhook_url.to_string(),
+            username: username.to_string(),
+            avatar_url: avatar_url.to_string(),
+        };
+
+        let _write = fs::write(
+            "config.json",
+            serde_json::to_string(&config)
+                .expect("Failed to serialize to json!")
+                .trim(),
+        )
+        .expect("Failed to write to file!");
+
+        config
+    }
+
+    pub fn from_file(path: &str) -> Config {
+        let config: Config = serde_json::from_str(
+            fs::read_to_string(path)
+                .expect("Failed while reading the config!")
+                .as_str(),
+        )
+        .expect("Error while parsing the config!");
+        config
+    }
+}
 
 impl Message {
     pub fn new(
@@ -115,32 +169,4 @@ impl Footer {
             },
         }
     }
-}
-
-pub fn gen_config() {
-    let mut webhook_url = String::new();
-    let mut username = String::new();
-    let mut avatar_url = String::new();
-
-    println!("Please enter your discord webhook url here:");
-    let _read = std::io::stdin().read_line(&mut webhook_url).unwrap();
-
-    println!("Please enter your desired username for the webhook");
-    let _read = std::io::stdin().read_line(&mut username).unwrap();
-
-    println!("Please enter the desired avatar url for the webhook");
-    let _read = std::io::stdin().read_line(&mut avatar_url).unwrap();
-
-    let config = Config {
-        webhook_url: webhook_url.trim().to_string(),
-        username: username.trim().to_string(),
-        avatar_url: avatar_url.trim().to_string(),
-    };
-    let _write = fs::write(
-        "config.json",
-        serde_json::to_string(&config)
-            .expect("Failed to serialize to json!")
-            .trim(),
-    )
-    .expect("Failed to write to file!");
 }

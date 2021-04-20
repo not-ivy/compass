@@ -1,6 +1,10 @@
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+pub struct Client {
+    pub config: Config,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Config {
     pub webhook_url: String,
     pub username: String,

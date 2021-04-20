@@ -1,34 +1,22 @@
 mod libs;
 
-use crate::libs::structs::{Author, Config, Embed, Field, Footer, Message};
+use crate::libs::structs::{Client, Config, Embed, Field, Message};
 use crate::libs::*;
-use std::fs;
-use std::path::Path;
 
 fn main() {
-    // TODO: Use non-blocking client
-    let client = reqwest::blocking::Client::new();
-
-    if !Path::new("config.json").exists() {
-        eprintln!("Config file not detected; Generating one...");
-        gen_config()
-    }
-
-    let config: Config = serde_json::from_str(
-        fs::read_to_string("config.json")
-            .expect("Failed while reading the config!")
-            .as_str(),
-    )
-    .expect("Error while parsing the config!");
-
-    let response = client
-        .post(&config.webhook_url)
-        .json(&guide(&config))
-        .send()
-        .expect("Error while sending request to webhook!");
-    println!("The Webhook responded with: {}", response.status());
+    let webhook_config = Config::from_file("config.json");
+    let webhook_client = Client::new(webhook_config.clone());
+    webhook_client.send(guide(&webhook_config));
 }
 
+// TODO: Macros, not function
+/// ```
+/// MessageBuilder! {
+///     Title -> ""
+///     Author -> ""
+///     etc...
+/// }
+/// ```
 fn guide(config: &Config) -> Message {
     let mut content = String::new();
     let mut selection = String::new();
