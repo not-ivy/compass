@@ -2,9 +2,15 @@ mod libs;
 
 use crate::libs::structs::{Client, Config, Embed, Field, Message};
 use crate::libs::*;
+use std::path::Path;
 
 fn main() {
-    let webhook_config = Config::from_file("config.json");
+    let mut webhook_config = if !Path::new("config.json").exists() {
+        // fill this in (webhook_url, username, avatar_url)
+        Config::new(String::from(""), String::from(""), String::from(""))
+    } else {
+        Config::from_file("config.json")
+    };
     let webhook_client = Client::new(webhook_config.clone());
     webhook_client.send(guide(&webhook_config));
 }
