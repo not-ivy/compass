@@ -30,16 +30,14 @@ impl Send for Client {
 impl Config {
     pub fn new(webhook_url: String, username: String, avatar_url: String) -> Config {
         let config = Config {
-            webhook_url: webhook_url.to_string(),
-            username: username.to_string(),
-            avatar_url: avatar_url.to_string(),
+            webhook_url: webhook_url.trim().to_string(),
+            username: username.trim().to_string(),
+            avatar_url: avatar_url.trim().to_string(),
         };
 
         let _write = fs::write(
             "config.json",
-            serde_json::to_string(&config)
-                .expect("Failed to serialize to json!")
-                .trim(),
+            serde_json::to_string(&config).expect("Failed to serialize to json!"),
         )
         .expect("Failed to write to file!");
 
@@ -104,7 +102,7 @@ impl Embed {
             },
             color: match color {
                 Some(color) => color,
-                None => 0 as u64,
+                None => 0_u64,
             },
             fields: match fields {
                 Some(field) => field,
