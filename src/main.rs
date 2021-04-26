@@ -6,7 +6,6 @@ use std::path::Path;
 
 fn main() {
     let webhook_config = if !Path::new("config.json").exists() {
-        // fill this in (webhook_url, username, avatar_url)
         config_guide()
     } else {
         Config::from_file("config.json")
@@ -17,18 +16,13 @@ fn main() {
 }
 
 fn config_guide() -> Config {
-    let mut webhook_url: String = String::from("");
-    let mut username: String = String::from("");
-    let mut avatar_url: String = String::from("");
+    let (mut webhook_url,mut username, mut avatar_url) = (String::from(""), String::from(""), String::from(""));
 
-    println!("Please enter the webhook url:");
-    let _read = std::io::stdin().read_line(&mut webhook_url).unwrap();
+    input("Please enter the webhook url:", &mut webhook_url);
 
-    println!("Please enter username desired for webhook:");
-    let _read = std::io::stdin().read_line(&mut username).unwrap();
+    input("Please enter username desired for webhook:", &mut username);
 
-    println!("Please enter desired avatar's url for webhook:");
-    let _read = std::io::stdin().read_line(&mut avatar_url).unwrap();
+    input("Please enter desired avatar's url for webhook:", &mut avatar_url);
 
     if webhook_url.is_empty() || username.is_empty() || avatar_url.is_empty() {
         panic!("You did not enter something correctly!")
@@ -37,25 +31,17 @@ fn config_guide() -> Config {
 }
 
 fn guide(config: &Config) -> Message {
-    let mut title: String = String::from("");
-    let mut content: String = String::from("");
-    let mut selection: String = String::from("");
-    let mut url: String = String::from("");
-    let mut thumbnail_url: String = String::from("");
-    let mut image_url: String = String::from("");
+    let (mut title, mut content, mut selection, mut url, mut thumbnail_url, mut image_url) = (String::from(""), String::from(""), String::from(""), String::from(""), String::from(""), String::from(""));
     let embed: Embed;
 
-    println!("Please enter the message content;");
-    let _read = std::io::stdin().read_line(&mut content).unwrap();
+    input("Please enter the message content;", &mut content);
 
-    println!("Embeds? (Y/n)");
-    let _read = std::io::stdin().read_line(&mut selection).unwrap();
+    input("Embeds? (Y/n)", &mut selection);
     return if selection.trim().to_lowercase() == "y" || selection.trim().is_empty() {
         embed = Embed::new(
             None,
             {
-                println!("Please enter the Embed title: ");
-                let _read = std::io::stdin().read_line(&mut title).unwrap();
+                input("Please enter the Embed title: ", &mut title);
                 if title.is_empty() {
                     "Title not specified"
                 } else {
@@ -63,8 +49,7 @@ fn guide(config: &Config) -> Message {
                 }
             },
             {
-                println!("Please enter the Embed url(skip if none): ");
-                let _read = std::io::stdin().read_line(&mut url).unwrap();
+                input("Please enter the Embed url(skip if none): ", &mut url);
                 if url.is_empty() {
                     None
                 } else {
@@ -74,18 +59,13 @@ fn guide(config: &Config) -> Message {
             Option::from("None"),
             None,
             Option::from(vec![{
-                let mut field_title: String = String::from("");
-                let mut field_content: String = String::from("");
-                let mut inline: String = String::from("");
+                let (mut field_title, mut field_content, mut inline) = (String::from(""), String::from(""), String::from(""));
 
-                println!("Please Enter your field title");
-                let _read = std::io::stdin().read_line(&mut field_title).unwrap();
+                input("Please enter the field title:", &mut field_title);
 
-                println!("Please enter field content:");
-                let _read = std::io::stdin().read_line(&mut field_content).unwrap();
+                input("Please enter the field content:", &mut field_content);
 
-                println!("Inline? (Y/n)");
-                let _read = std::io::stdin().read_line(&mut inline).unwrap();
+                input("Inline? (Y/n)", &mut inline);
 
                 Field {
                     name: field_title,
@@ -94,8 +74,7 @@ fn guide(config: &Config) -> Message {
                 }
             }]),
             {
-                println!("Please enter the thumbnail url for embed (skip if none): ");
-                let _read = std::io::stdin().read_line(&mut thumbnail_url).unwrap();
+                input("Please enter the thumbnail url for embed (skip if none): ", &mut thumbnail_url);
                 if thumbnail_url.is_empty() {
                     None
                 } else {
@@ -103,8 +82,7 @@ fn guide(config: &Config) -> Message {
                 }
             },
             {
-                println!("Please enter the image url for embed (skip if none): ");
-                let _read = std::io::stdin().read_line(&mut image_url).unwrap();
+                input("Please enter the image url for embed (skip if none): ", &mut image_url);
                 if image_url.is_empty() {
                     None
                 } else {

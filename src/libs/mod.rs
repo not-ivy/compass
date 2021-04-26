@@ -168,3 +168,10 @@ impl Footer {
         }
     }
 }
+
+// "wow such magic"
+//              - Doge
+pub fn input(prompt: &str, var: &mut String) {
+    println!("{}", prompt);
+    let _ = std::io::stdin().read_line(var).unwrap();
+}
