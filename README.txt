@@ -10,5 +10,3 @@ How to use:
 
 For Library:
 Go to the lib branch.
-
-Please fix my boilerplate code
