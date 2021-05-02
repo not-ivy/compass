@@ -1,6 +1,6 @@
-# Webhook: A user friendly guide and library for discord webhooks, written using rust
+# Compasss: A user friendly guide and library for discord webhooks, written using rust
 
-## For Library, click [here](https://github.com/sourTaste000/webhook/tree/lib)
+## For Library, click [here](https://github.com/sourTaste000/compasss/tree/lib)
 
 ### How to download:
 Download the latest release, or find the latest build artifact ingithub actions.
