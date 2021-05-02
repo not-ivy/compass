@@ -8,4 +8,5 @@ How to download:
 How to use:
     Just run the executable and follow the guide.
 
-Please fix my boilerplate code
+For Library:
+Go to the lib branch.
