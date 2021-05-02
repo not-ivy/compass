@@ -4,7 +4,7 @@ use crate::libs::structs::{Client, Config, Embed, Field, Message};
 use crate::libs::*;
 use std::path::Path;
 
-fn main() {
+fn main() -> Result<(), ()>{
     let webhook_config = if !Path::new("config.json").exists() {
         config_guide()
     } else {
@@ -12,7 +12,8 @@ fn main() {
     };
     let webhook_client = Client::new(webhook_config.clone());
     let response = webhook_client.send(guide(&webhook_config));
-    println!("{}", response.to_string())
+    println!("{}", response.to_string());
+    Ok(())
 }
 
 fn config_guide() -> Config {
