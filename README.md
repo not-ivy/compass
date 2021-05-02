@@ -1,4 +1,4 @@
-# Compasss: A user friendly guide and library for discord webhooks, written using rust
+# Compass: A user friendly guide and library for discord webhooks, written using rust
 
 ## For Library, click [here](https://github.com/sourTaste000/compasss/tree/lib)
 
