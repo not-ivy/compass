@@ -161,6 +161,8 @@ fn main() {
 ```
 I know creating embeds is a pain, expect a rewrite coming soon™
 
+For a full example, go to the `client` branch.
+
 ___
 ### Extras
 Provides a `input()` function.  
