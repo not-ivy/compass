@@ -1,18 +1,14 @@
 use serde_derive::{Deserialize, Serialize};
 
-pub struct Client {
-    pub config: Config,
-}
-
-#[derive(Serialize, Deserialize, Clone)]
-pub struct Config {
+#[derive(Serialize, Deserialize)]
+pub (crate) struct Client {
     pub webhook_url: String,
     pub username: String,
     pub avatar_url: String,
 }
 
 #[derive(Serialize)]
-pub struct Message {
+pub (crate) struct Message {
     pub username: String,
     pub avatar_url: String,
     pub content: String,
@@ -20,7 +16,7 @@ pub struct Message {
 }
 
 #[derive(Serialize)]
-pub struct Embed {
+pub (crate) struct Embed {
     pub author: Author,
     pub title: String,
     pub url: String,
@@ -33,31 +29,31 @@ pub struct Embed {
 }
 
 #[derive(Serialize)]
-pub struct Author {
+pub (crate) struct Author {
     pub name: String,
     pub url: String,
     pub icon_url: String,
 }
 
 #[derive(Serialize)]
-pub struct Field {
+pub (crate) struct Field {
     pub name: String,
     pub value: String,
     pub inline: bool,
 }
 
 #[derive(Serialize)]
-pub struct Thumbnail {
+pub (crate) struct Thumbnail {
     pub url: String,
 }
 
 #[derive(Serialize)]
-pub struct Image {
+pub (crate) struct Image {
     pub url: String,
 }
 
 #[derive(Serialize)]
-pub struct Footer {
+pub (crate) struct Footer {
     pub text: String,
     pub icon_url: String,
 }

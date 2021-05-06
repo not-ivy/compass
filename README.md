@@ -1,37 +1,23 @@
 # How To Use This Library
 
 ### Creating a Webhook Client
-To Create a webhook client, create the config first:  
+Then, you can create the client by:
 ```rust
-Config::new("url".to_string(), "username".to_string(), "avatar_url".to_string())
+Client::new("url".to_string(), "username".to_string(), "avatar_url".to_string())
 ```
-This returns a `Config` and writes this config to `config.json`.  
 
 Or, you can read from an existing file:
 ```rust
-Config::from_file("./config.json")
+Client::from_file("./config.json")
 ```
-This reads `config.json` file, creates and returns a new `Config`.  
+This reads `config.json` file, creates and returns a new `Config`.
 
-Then, you can create the client by:
-```rust
-Client::new(config)
-```
-This returns a Client, and you can send messages!
+These two methods returns a Client, and you can send messages!
 
 ___
 ### Sending Messages
 `client.send()` receives a `Message` struct, and returns a `StatusCode` from the webhook.
-To create a `Message` struct, you can do:
-```rust
-Message {
-    username: config.username,
-    avatar_url: config.avatar_url,
-    content: "blah".to_string(),
-    embeds: vec![]
-}
-```
-Or, you can do
+To create a `Message`, look at this code:
 ```rust
 Message::new(
     "captain hook", // config.username.as_str()
@@ -43,74 +29,43 @@ Message::new(
 
 ___
 ### Adding Embeds To Message
-You can create an embed using the `Embed` struct, like this
+You can use the `new()` function from Embed. You can either fill in None or content.
 ```rust
-Embed {
-    author: Author,
-    title: "hi".to_string(),
-    url: "https://github.com/sourtaste000/webhook".to_string(),
-    description: "hello".to_string(),
-    color: 10195199u64,
-    fields: vec![Field],
-    thumbnail: Thumbnail,
-    image: Image,
-    footer: Footer,
-}
+Embed::new(None, // Author
+"Embed Title", // Title
+None, // URL
+None, // Description
+None, // Color
+None, // Fields
+None, //Thumbnail URL
+None, // Image URL
+None, // Footer URL
+)
 ```
 
 #### Creating an `Author`
 ```rust
-Author {
-    name: "sourTaste000".to_string(),
-    url: "https://github.com/sourtaste000/webhook".to_string(),
-    icon_url: "https://avatars.githubusercontent.com/u/47074495".to_string(),
-}
+Author::new(
+"name",
+None, // url
+None, // icon url
+)
 ```
 
 #### Creating a `Field`
 ```rust
-Field {
-    "Field Title".to_string(),
-    "Field Content".to_string(),
-    false, // or true for inline
-}
-```
-
-#### Creating a `Thumbnail`
-```rust
-Field {
-    "Field Title".to_string(),
-    "Field Content".to_string(),
-    false, // or true for inline
-}
-```
-
-#### Creating an `Image`
-```rust
-Image {
-    url: "https://avatars.githubusercontent.com/u/47074495".to_string()
-}
+Field::new(
+"Field title",
+"Field content",
+false, // inline
+)
 ```
 
 #### Creating a `Footer`
 ```rust
-Footer {
-    text: "Footer Text".to_string(),
-    icon_url: "https://github.com/sourtaste000/webhook".to_string()
-}
-```
-
-You can also use the `new()` function from Embed, which is easier, and you can also fill in `None`:
-```rust
-Embed::new(None, // Author
-          "Embed Title", // Title
-          None, // URL
-          None, // Description
-          None, // Color
-          None, // Fields
-          None, //Thumbnail URL
-          None, // Image URL
-          None, // Footer URL
+Footer::new(
+"Footer",
+None, // icon url
 )
 ```
 
@@ -118,10 +73,9 @@ ___
 ### Working(I hope) Example:
 ```rust
 fn main() {
-    let config: Config = Config::new("https://discord.com/api/webhooks/1234567890/abcdefghijk".to_string(), "captain hook", "https://avatars.githubusercontent.com/u/47074495");
+    let client: Client = Client::new("https://discord.com/api/webhooks/1234567890/abcdefghijk".to_string(), "captain hook", "https://avatars.githubusercontent.com/u/47074495");
     // or
-    let read_config: Config = Config::from_file("config.json");
-    let client: Client = Client::new(config.clone());
+    let read_client: Client = Client::from_file("config.json");
     // You can also use the structs to create a Message
     let message = Message::new(
         "captain hook", // config.username.as_str()
@@ -161,7 +115,7 @@ fn main() {
 ```
 I know creating embeds is a pain, expect a rewrite coming soon™
 
-For a full example, go to the `client` branch.
+~~For a full example, go to the `client` branch.~~ [OUTDATED]
 
 ___
 ### Extras

@@ -9,47 +9,41 @@ pub(crate) trait Send {
 }
 
 impl Client {
-    pub fn new(config: Config) -> Client {
-        Client { config }
+    pub fn new(webhook_url: &str, username: &str, avatar_url: &str) -> Client {
+        let client = Client {
+            webhook_url: webhook_url.to_string(),
+            username: username.to_string(),
+            avatar_url: avatar_url.to_string()
+        };
+
+        let _write = fs::write(
+            "config.json",
+            serde_json::to_string(&client).expect("Failed to serialize to json!")
+        ).expect("Failed to write to file!");
+
+        client
+    }
+
+
+    pub fn from_file(path: &str) -> Client {
+        let client: Client = serde_json::from_str(
+            fs::read_to_string(path)
+                .expect("Failed while reading the config!")
+                .as_str(),
+        ).expect("Error while parsing the config!");
+
+        client
     }
 }
 
 impl Send for Client {
     fn send(&self, message: Message) -> StatusCode {
         let response = reqwest::blocking::Client::new()
-            .post(&self.config.webhook_url)
+            .post(&self.webhook_url)
             .json(&message)
             .send()
             .expect("Error while sending request to webhook!");
         response.status()
-    }
-}
-
-impl Config {
-    pub fn new(webhook_url: String, username: String, avatar_url: String) -> Config {
-        let config = Config {
-            webhook_url: webhook_url.trim().to_string(),
-            username: username.trim().to_string(),
-            avatar_url: avatar_url.trim().to_string(),
-        };
-
-        let _write = fs::write(
-            "config.json",
-            serde_json::to_string(&config).expect("Failed to serialize to json!"),
-        )
-            .expect("Failed to write to file!");
-
-        config
-    }
-
-    pub fn from_file(path: &str) -> Config {
-        let config: Config = serde_json::from_str(
-            fs::read_to_string(path)
-                .expect("Failed while reading the config!")
-                .as_str(),
-        )
-            .expect("Error while parsing the config!");
-        config
     }
 }
 
